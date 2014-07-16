@@ -16,12 +16,19 @@ syn match elixirComment '#.*' contains=elixirTodo
 syn keyword elixirTodo FIXME NOTE TODO OPTIMIZE XXX HACK contained
 
 syn keyword elixirKeyword is_atom is_binary is_bitstring is_boolean is_float is_function is_integer is_list is_number is_pid is_port is_record is_reference is_tuple is_exception
-syn keyword elixirKeyword case cond bc lc inlist inbits if unless try receive function
-syn keyword elixirKeyword exit raise throw after rescue catch else
+syn keyword elixirKeyword receive function
+syn keyword elixirKeyword after
 syn keyword elixirKeyword use quote unquote super alias
-syn match   elixirKeyword '\<\%(->\)\>\s*'
+syn keyword elixirErrors exit raise throw rescue try catch assert assert_in_delta assert_raise flunk refute refute_in_delta assert_receive assert_received catch_error catch_exit catch_throw refute_receive refute_received
+syn keyword elixirConditionals case cond if unless else
+syn keyword elixirRepeat bc lc inlist inbits
+syn keyword elixirKernel1 atom_to_binary atom_to_list binary_parts binary_to_atom binary_to_existing_atom binary_to_float binary_to_integer binary_to_list binary_to_term bit_size bitstring_to_list byte_size float_to_binary float_to_list hd integer_to_binary integer_to_list iolist_size iolist_to_binary length list_to_atom list_to_binary list_to_bitstring list_to_existing_atom list_to_float list_to_integer list_to_pid list_to_tuple pid_to_list size term_to_binary tl tuple_size tuple_to_list
+syn keyword elixirKernel2 abs make_ref max min node round trunc
+syn keyword elixirKernel3 self apply function_exported? is_alive macro_exported? spawn spawn_link
 
 syn keyword elixirInclude import require
+syn match   elixirKeyword '\<\%(->\)\>\s*'
+
 
 syn keyword elixirOperator and not or when xor in
 syn match elixirOperator '%=\|\*=\|\*\*=\|+=\|-=\|\^=\|||='
@@ -29,9 +36,12 @@ syn match elixirOperator "\%(<=>\|<\%(<\|=\)\@!\|>\%(<\|=\|>\)\@!\|<=\|>=\|===\|
 syn match elixirOperator "!+[ \t]\@=\|&&\|||\|\^\|\*\|+\|-\|/"
 syn match elixirOperator "|\|++\|--\|\*\*\|\/\/\|<-\|<>\|<<\|>>\|=\|\.\|::"
 
+syn match elixirDelim2 ':' contained
 syn match elixirSymbol '\(:\)\@<!:\%([a-zA-Z_]\w*\%([?!]\|=[>=]\@!\)\?\|<>\|===\?\|>=\?\|<=\?\)'
 syn match elixirSymbol '\(:\)\@<!:\%(<=>\|&&\?\|%\(()\|\[\]\|{}\)\|++\?\|--\?\|||\?\|!\|//\|[%&`/|]\)'
-syn match elixirSymbol "\%([a-zA-Z_]\w*\([?!]\)\?\):\(:\)\@!"
+syn match elixirLabel "\%([a-zA-Z_]\w*\([?!]\)\?\):\(:\)\@!"he=e-1 contains=elixirDelim2
+syn match elixirStatement "\%(do\([?!]\)\?\):\(:\)\@!"he=e-1 contains=elixirDelim2
+
 
 syn keyword elixirName nil
 syn match   elixirName '\<[A-Z]\w*\>'
@@ -74,7 +84,8 @@ syn match elixirString             "\(\w\)\@<!?\%(\\\(x\d{1,2}\|\h{1,2}\h\@!\>\|
 syn region elixirBlock              matchgroup=elixirKeyword start="\<do\>\(:\)\@!" end="\<end\>" contains=ALLBUT,@elixirNotTop fold
 syn region elixirAnonymousFunction  matchgroup=elixirKeyword start="\<fn\>"         end="\<end\>" contains=ALLBUT,@elixirNotTop fold
 
-syn region elixirArguments start="(" end=")" contained contains=elixirOperator,elixirSymbol,elixirPseudoVariable,elixirName,elixirBoolean,elixirVariable,elixirUnusedVariable,elixirNumber,elixirDocString,elixirSymbolInterpolated,elixirRegex,elixirRegexEscape,elixirRegexEscapePunctuation,elixirRegexCharClass,elixirRegexQuantifier,elixirSpecial,elixirString,elixirDelimiter
+"syn region elixirArguments start="(" end=")" contained contains=elixirOperator,elixirSymbol,elixirPseudoVariable,elixirName,elixirBoolean,elixirVariable,elixirUnusedVariable,elixirNumber,elixirDocString,elixirSymbolInterpolated,elixirRegex,elixirRegexEscape,elixirRegexEscapePunctuation,elixirRegexCharClass,elixirRegexQuantifier,elixirSpecial,elixirString,elixirDelimiter
+syn region elixirArguments start="(" end=")" contained contains=TOP
 
 syn match elixirDelimEscape "\\[(<{\[)>}\]]" transparent display contained contains=NONE
 
@@ -127,13 +138,13 @@ hi def link elixirPrivateDefine          Define
 hi def link elixirModuleDefine           Define
 hi def link elixirProtocolDefine         Define
 hi def link elixirImplDefine             Define
-hi def link elixirRecordDefine           Define
-hi def link elixirPrivateRecordDefine    Define
+hi def link elixirRecordDefine           Structure
+hi def link elixirPrivateRecordDefine    Structure
 hi def link elixirMacroDefine            Define
 hi def link elixirPrivateMacroDefine     Define
 hi def link elixirDelegateDefine         Define
 hi def link elixirOverridableDefine      Define
-hi def link elixirExceptionDefine        Define
+hi def link elixirExceptionDefine        Exception
 hi def link elixirCallbackDefine         Define
 hi def link elixirFunctionDeclaration    Function
 hi def link elixirMacroDeclaration       Macro
@@ -143,6 +154,7 @@ hi def link elixirTodo                   Todo
 hi def link elixirKeyword                Keyword
 hi def link elixirOperator               Operator
 hi def link elixirSymbol                 Constant
+hi def link elixirLabel                  Label
 hi def link elixirPseudoVariable         Constant
 hi def link elixirName                   Type
 hi def link elixirBoolean                Boolean
@@ -157,6 +169,14 @@ hi def link elixirRegexEscapePunctuation elixirSpecial
 hi def link elixirRegexCharClass         elixirSpecial
 hi def link elixirRegexQuantifier        elixirSpecial
 hi def link elixirSpecial                Special
+hi def link elixirKernel1                Identifier
+hi def link elixirKernel2                Operator
+hi def link elixirKernel3                Special
 hi def link elixirString                 String
 hi def link elixirSigil                  String
 hi def link elixirDelimiter              Delimiter
+hi def link elixirErrors                 Exception
+hi def link elixirConditionals           Conditional
+hi def link elixirRepeat                 Repeat
+hi def link elixirStatement              Statement
+hi def link elixirDelim2                 Delimiter
